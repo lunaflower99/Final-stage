@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Puzzle Unlock Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    #puzzle {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 2px;
+      margin: 20px auto;
+      width: 306px;
+      height: 306px;
+      border: 2px solid #333;
+      background: #ccc;
+    }
+    .piece {
+      width: 100px;
+      height: 100px;
+      background-image: url('766A0487-3D4F-4898-8CF6-A64E580044E1.jpeg'); /* 你的图片 */
+      background-size: 300px 300px;
+      display: none;
+      border: 1px solid #999;
+    }
+    #inputs {
+      display: grid;
+      grid-template-columns: repeat(3, 160px);
+      gap: 5px;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    input {
+      padding: 5px;
+      width: 150px;
+    }
+    button {
+      padding: 5px 15px;
+      margin-top: 5px;
+    }
+    #message {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>🔒 Puzzle Unlock Game</h2>
+  <p>Enter the password in any box to unlock its piece!</p>
+
+  <div id="inputs">
+    <div>
+      <input type="text" id="code1" placeholder="Password 1">
+      <button onclick="unlockPiece(0)">Unlock</button>
+    </div>
+    <div>
+      <input type="text" id="code2" placeholder="Password 2">
+      <button onclick="unlockPiece(1)">Unlock</button>
+    </div>
+    <div>
+      <input type="text" id="code3" placeholder="Password 3">
+      <button onclick="unlockPiece(2)">Unlock</button>
+    </div>
+    <div>
+      <input type="text" id="code4" placeholder="Password 4">
+      <button onclick="unlockPiece(3)">Unlock</button>
+    </div>
+    <div>
+      <input type="text" id="code5" placeholder="Password 5">
+      <button onclick="unlockPiece(4)">Unlock</button>
+    </div>
+    <div>
+      <input type="text" id="code6" placeholder="Password 6">
+      <button onclick="unlockPiece(5)">Unlock</button>
+    </div>
+    <div>
+      <input type="text" id="code7" placeholder="Password 7">
+      <button onclick="unlockPiece(6)">Unlock</button>
+    </div>
+    <div>
+      <input type="text" id="code8" placeholder="Password 8">
+      <button onclick="unlockPiece(7)">Unlock</button>
+    </div>
+    <div>
+      <input type="text" id="code9" placeholder="Password 9">
+      <button onclick="unlockPiece(8)">Unlock</button>
+    </div>
+  </div>
+
+  <div id="message"></div>
+  <div id="puzzle"></div>
+
+  <script>
+    // 每块拼图对应密码
+    const passwords = [
+      "20250809","CHINA","594",
+      "41132","62","NGRY",
+      "ROME","BIDBTPAL","40"
+    ];
+
+    const unlocked = Array(passwords.length).fill(false);
+
+    function createPuzzle() {
+      const puzzle = document.getElementById("puzzle");
+      puzzle.innerHTML = "";
+      for(let i=0;i<passwords.length;i++){
+        const piece = document.createElement("div");
+        piece.classList.add("piece");
+        piece.dataset.index = i;
+        piece.style.backgroundPosition = `-${(i%3)*100}px -${Math.floor(i/3)*100}px`;
+        puzzle.appendChild(piece);
+      }
+    }
+
+    function unlockPiece(index){
+      const input = document.getElementById(`code${index+1}`).value.trim();
+      const message = document.getElementById("message");
+
+      if(input === passwords[index]){
+        if(!unlocked[index]){
+          const piece = document.querySelector(`.piece[data-index='${index}']`);
+          piece.style.display = "block";
+          unlocked[index] = true;
+          message.textContent = `✅ Piece ${index+1} unlocked!`;
+          message.style.color = "green";
+        } else {
+          message.textContent = "⚠️ This piece is already unlocked!";
+          message.style.color = "orange";
+        }
+      } else {
+        message.textContent = "❌ Wrong password!";
+        message.style.color = "red";
+      }
+
+      document.getElementById(`code${index+1}`).value = "";
+
+      if(unlocked.every(v => v)){
+        message.textContent = "🎉 All pieces unlocked!";
+        message.style.color = "green";
+      }
+    }
+
+    createPuzzle();
+  </script>
+</body>
+</html>
